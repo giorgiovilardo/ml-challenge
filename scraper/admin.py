@@ -4,7 +4,7 @@ from .models import ScraperResponse
 
 
 class ScraperResponseAdmin(admin.ModelAdmin):
-    list_display = ("url", "uuid", "has_request_failed")
+    list_display = ("url", "uuid", "failed_request")
     readonly_fields = ["uuid"]
 
 
