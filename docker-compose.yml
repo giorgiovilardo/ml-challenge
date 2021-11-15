@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  django-ml:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=g
+      - DJANGO_SUPERUSER_PASSWORD=g
+      - DJANGO_SUPERUSER_EMAIL=g@example.com

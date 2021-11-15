@@ -62,7 +62,7 @@ But...
 But the truth is no one really asked to make it async, and YAGNI is real enough
 to avoid getting into the snakepits of the async implementation, which basically
 needs a ton more pieces of software, complicates testing...and forces the client to
-do a second request to see the results, which he might not want to do.
+do a second request to see the results, which it might not want to do.
 
 So while async would have been cool we'll stay sync.
 
@@ -89,8 +89,8 @@ but will output something like
 }
 ```
 
-The last three fields and `regex` might not be present in the response as I prefer
-to avoid nulls whenever possible and I esplicitly save if the request failed or not
+The last three fields and `regex` might not be present in the response, as I prefer
+to avoid nulls whenever possible - and I esplicitly save if the request failed or not
 rather than have some in-band failure values e.g. status code 0 or null.
 
 The UUID is there as I like to attach an UUID to resources and tend to hide the `id` PK, to avoid enumeration
@@ -109,3 +109,21 @@ The combo `django` and `djangorestframework` looks like a sane choice to do it q
 I think I'll use `marshmallow` for validation insted of DRF stuff which I honestly found
 bizantine and needlessly complex. `requests` is my http client of choice.
 
+## Implementation v1
+
+Mostly straightforward: the view function unpacks the necessary request data into a couple variables
+and passes them to a Service, which validates the request, does the necessary operations and returns
+a Django Model to the view. The Service module exposes a mapper specific for this request/response,
+(ideally trying something similar to the vertical slice architecture,
+and in general keeping things that needs to change close together)
+so the controller can just pass the Model to the mapper and construct a proper JSON response using
+DRF `Response` type.
+
+I used the status code `201` as it's IMHO good form when inserting new stuff into the db.
+
+For the test suite, I tried to cover significantly the business cases rather than the technicality
+covered by the tests. There's a hole in the missing unit tests of the service, but `Mock` and `patch` decided
+to give me trouble so I had to resort to integrations.
+
+All in all I'm satisfacted with the test suite, if anything some things lead to combinatorial explosions
+of tests, so there's probably some design to make better somewhere.
