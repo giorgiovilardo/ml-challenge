@@ -64,5 +64,5 @@ class EndToEndTests(APITestCase):
             data={"url": "http://httpbin.org/get", "regex": '"X-Amzn-Trace-Id"'},
             format="json",
         )
-        print(res.data)
+
         self.assertEqual(status.HTTP_201_CREATED, res.status_code)
