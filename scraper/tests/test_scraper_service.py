@@ -10,18 +10,21 @@ from scraper.models import ScraperResponse
 class ScraperServiceIntegrationTests(TestCase):
     def test_returns_a_failed_response_on_http_client_failure(self):
         res = scraper_service.perform_request(url="http://10.0.0.1", regex=None)
+
         self.assertTrue(res.failed_request)
         self.assertEqual(res.url, "http://10.0.0.1")
         self.assertIsNone(res.regex)
 
     def test_returns_a_successful_response_with_no_regex(self):
         res = scraper_service.perform_request(url="http://httpbin.org/get", regex=None)
+
         self.assertFalse(res.failed_request)
         self.assertEqual(res.url, "http://httpbin.org/get")
         self.assertIsNone(res.regex)
 
     def test_returns_a_successful_response(self):
         res = scraper_service.perform_request(url="http://httpbin.org/get", regex=".*")
+
         self.assertFalse(res.failed_request)
         self.assertTrue(res.matches_regex)
         self.assertEqual(res.url, "http://httpbin.org/get")
@@ -93,6 +96,7 @@ class RequestValidatorUnitTests(TestCase):
 
     def test_url_with_no_schema_is_a_validation_error(self):
         invalid_dto = {"url": "www.example.com"}
+
         self.assertRaisesMessage(
             marshmallow.exceptions.ValidationError,
             "Not a valid URL.",
@@ -106,7 +110,9 @@ class ResponseMapperUnitTests(TestCase):
         response_model = ScraperResponse.objects.create(
             url="https://www.e.it", failed_request=True
         )
+
         response_dict = scraper_service.map_scraper_response_to_dict(response_model)
+
         self.assertEqual(
             response_dict,
             {
@@ -120,7 +126,9 @@ class ResponseMapperUnitTests(TestCase):
         response_model = ScraperResponse.objects.create(
             url="https://www.e.it", failed_request=True, regex=".*"
         )
+
         response_dict = scraper_service.map_scraper_response_to_dict(response_model)
+
         self.assertEqual(
             response_dict,
             {
@@ -135,7 +143,9 @@ class ResponseMapperUnitTests(TestCase):
         response_model = ScraperResponse.objects.create(
             url="https://www.e.it", roundtrip=timedelta(seconds=0.1), status_code=200
         )
+
         response_dict = scraper_service.map_scraper_response_to_dict(response_model)
+
         self.assertEqual(
             response_dict,
             {
@@ -155,7 +165,9 @@ class ResponseMapperUnitTests(TestCase):
             roundtrip=timedelta(seconds=0.1),
             status_code=200,
         )
+
         response_dict = scraper_service.map_scraper_response_to_dict(response_model)
+
         self.assertEqual(
             response_dict,
             {

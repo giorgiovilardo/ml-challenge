@@ -8,6 +8,7 @@ class ScraperResponseUnitTests(TestCase):
         scraped_response_str = str(
             ScraperResponse.objects.create(url="https://www.example.com")
         )
+
         self.assertTrue(
             scraped_response_str.startswith("https://www.example.com - Scraped")
         )
@@ -18,6 +19,7 @@ class ScraperResponseUnitTests(TestCase):
                 url="https://www.example.com", failed_request=True
             )
         )
+
         self.assertTrue(
             failed_response_str.startswith("https://www.example.com - Failed")
         )
