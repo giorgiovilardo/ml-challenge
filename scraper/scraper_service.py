@@ -42,7 +42,7 @@ def perform_request(*, url: str, regex: str | None) -> ScraperResponse:
 
 def _check_if_regex_matches_content(*, regex: str, content: str):
     if regex is not None:
-        return True if re.match(regex, content) else False
+        return True if re.search(regex, content) else False
     return None
 
 
