@@ -82,10 +82,10 @@ but will output something like
   "uuid": "an UUID",
   "url": "the requested url",
   "regex": "the requested regex, optional",
-  "failed_request": bool,
-  "status_code": int,
-  "roundtrip": timedelta,
-  "matches_regex": bool
+  "failed_request": false,
+  "status_code": 200,
+  "roundtrip": "a serialized py's timedelta",
+  "matches_regex": true
 }
 ```
 

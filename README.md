@@ -1,4 +1,4 @@
-# maieutical-labs-challenge
+# ml-challenge
 
 ## What this project does
 
@@ -13,6 +13,10 @@ Per ogni controllo vogliamo salvare in database il tempo di risposta, lo status
 code e se il contenuto della risposta fa il match con una espressione regolare
 opzionalmente inviata alla API.
 ```
+
+## Why I designed it like I did
+
+Read the [journal](JOURNAL.md) for the technical spiegone.
 
 ## How it works
 
@@ -43,7 +47,7 @@ There are 6 `make` targets to run:
 The path accepting data is `/`, the root path.
 
 It accepts, via `POST` method, a json object with this shape:
-```json
+```json5
 {
   "url": "string that contains an url with http or https schema",
   "regex": "string that contains a regex" // Optional
@@ -51,21 +55,21 @@ It accepts, via `POST` method, a json object with this shape:
 ```
 
 The program will reply, in case the data you submitted is valid, with an object with this shape:
-```json
+```json5
 {
-  "uuid": "string that contains an UUID" // Always present. UUID of your request.
-  "url": "string that contains an url with http or https schema", // Always present
-  "failed_request": bool, // Always present. The server was able to do a request to the website you asked for?
-  "regex": "string that contains a regex", // Optional, only present if you passed a regex; mirrors back the argument you passed
-  "roundtrip": "string that contains the number of seconds that the request took", // Optional, only present if the request did not fail. It's a stringified float
-  "status_code": int, // Optional, only present if the request did not fail. Integer with the status code.
-  "matches_regex": bool, // Optional, only present if you passed a regex. Tells if it has been possible to find a match
+  "uuid": "UUID of your request", // Always present
+  "url": "an http/https url", // Always present
+  "failed_request": false // Always present. Was the server able to request the url you asked for?
+  "regex": "a regex", // Optional, only present if you passed a regex; mirrors back the argument you passed
+  "roundtrip": "number of seconds the request took", // Optional, only present if the request did not fail. It's a stringified float
+  "status_code": 200, // Optional, only present if the request did not fail. Integer with the status code.
+  "matches_regex": true, // Optional, only present if you passed a regex. Tells if it has been possible to find a match
 }
 ```
 with a status code of `201`.
 
 In case you submit invalid data, you will get a response of this shape:
-```json
+```json5
 {
     "validation_errors": {
         "wrong data field": ["List of validation messages to correct"]
@@ -74,7 +78,3 @@ In case you submit invalid data, you will get a response of this shape:
 ```
 
 with a status code of `400`. There can be more than one wrong data field and more than one message per field.
-
-## Why I designed it like I did
-
-Read the [journal](JOURNAL.md) for the technical spiegone.
